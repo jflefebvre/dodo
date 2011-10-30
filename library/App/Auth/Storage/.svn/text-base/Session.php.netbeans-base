@@ -1,0 +1,59 @@
+<?php
+
+class App_Auth_Storage_Session implements Zend_Auth_Storage_Interface
+{
+    protected $_session;
+
+    public function __construct($_session)
+    {
+        $this->_session  = new Zend_Session_Namespace($this->_namespace);
+    }
+
+    /**
+     * Defined by Zend_Auth_Storage_Interface
+     *
+     * @return boolean
+     */
+    public function isEmpty()
+    {
+        return !isset($this->_session->{'userid'});
+    }
+
+    /**
+     * Defined by Zend_Auth_Storage_Interface
+     *
+     * @return mixed
+     */
+    public function read()
+    {
+        return array(
+                'userid'=>$this->_session->{'userid'},
+                'username'=>$this->_session->{'username'},
+                'userrole'=>$this->_session->{'userrole'});
+    }
+
+    /**
+     * Defined by Zend_Auth_Storage_Interface
+     *
+     * @param  mixed $contents
+     * @return void
+     */
+    public function write($contents)
+    {
+        $this->_session->{'userid'} = $contents['userid'];
+        $this->_session->{'username'} = $contents['username'];
+        $this->_session->{'userrole'} = $contents['username'];
+    }
+
+    /**
+     * Defined by Zend_Auth_Storage_Interface
+     *
+     * @return void
+     */
+    public function clear()
+    {
+        unset($this->_session->{'userid'});
+        unset($this->_session->{'username'});
+        unset($this->_session->{'userrole'});
+    }
+}
